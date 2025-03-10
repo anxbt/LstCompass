@@ -140,6 +140,13 @@ function Layout({ children }: { children: React.ReactNode }) {
 function App() {
 
   // useEffect(() => {
+  //   console.log("Tokens:", tokens);
+  //   console.log("Search Query:", searchQuery);
+  //   console.log("Active Filter:", activeFilter);
+  //   console.log("Filtered Tokens:", filteredTokens);
+  // }, [tokens, searchQuery, activeFilter, filteredTokens]);
+
+  // useEffect(() => {
     
   //   initGA('G-F5CYHY4KS2');
   // }, []);
