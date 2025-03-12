@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { CoinGeckoToken, StakingToken } from '../types';
+import { ICoinGeckoToken, IDefiLlamaToken } from '../types';
 
 const COINGECKO_API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=liquid-staking-tokens&order=market_cap_desc';
 const DEFI_LLAMA_API = 'https://api.llama.fi/protocols';
@@ -27,8 +27,8 @@ async function fetchTokenData() {
     throw new Error('Failed to fetch token data');
   }
 
-  const cgData: CoinGeckoToken[] = await cgResponse.json();
-  const llamaData = await llamaResponse.json();
+  const cgData: ICoinGeckoToken[] = await cgResponse.json();
+  const llamaData: IDefiLlamaToken[] = await llamaResponse.json();
 
   const liquidStakingProtocols = llamaData.filter(
     (protocol: any) => protocol.category === 'Liquid Staking'
@@ -59,7 +59,7 @@ async function fetchTokenData() {
       price: token.current_price,
       marketCap: token.market_cap,
       volume24h: token.total_volume,
-      tvl: llamaProtocol?.tvl || 0,
+      tvl: token.|| 0,
       tvlChange1d: llamaProtocol?.tvlChange1d || 0,
       tvlChange1m: llamaProtocol?.tvlChange1m || 0,
       mcapTvl: llamaProtocol?.mcapTvl || 0,

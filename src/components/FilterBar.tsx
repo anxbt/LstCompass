@@ -1,7 +1,7 @@
 import React from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 
-export type FilterOption = 'all' | 'highest_apy' | 'highest_tvl' | 'highest_volume';
+export type FilterOption = 'all' | 'highest_apy' | 'highest_tvl' | 'highest_volume'| 'market_cap_rank';
 
 interface FilterBarProps {
   selectedFilter: FilterOption;
@@ -21,6 +21,7 @@ export function FilterBar({ selectedFilter, onFilterChange }: FilterBarProps) {
           { id: 'highest_apy', label: 'Highest APY' },
           { id: 'highest_tvl', label: 'Highest TVL' },
           { id: 'highest_volume', label: 'Highest Volume' },
+          { id: 'market_cap_rank', label: 'Market Cap Rank' },
         ].map((filter) => (
           <button
             key={filter.id}

@@ -1,10 +1,9 @@
-export interface StakingToken {
+export interface IDefiLlamaToken {
   id: string;
   name: string;
   symbol: string;
   price: number;
   marketCap: number;
-  volume24h: number;
   tvl: number;
   tvlChange1d: number;
   tvlChange1m: number;
@@ -53,7 +52,7 @@ export interface StakingPlatform {
   apy: number;
 }
 
-export interface CoinGeckoToken {
+export interface ICoinGeckoToken {
   id: string;
   symbol: string;
   name: string;

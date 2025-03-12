@@ -30,6 +30,9 @@ export function useTokenFilters(tokens: StakingToken[]) {
       case 'highest_volume':
         filtered.sort((a, b) => b.volume24h - a.volume24h);
         break;
+      case 'market_cap_rank':
+        filtered.sort((a, b) => (a.marketCapRank ?? 0) - (b.marketCapRank ?? 0));
+        break;
       default:
         break;
     }
