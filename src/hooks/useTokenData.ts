@@ -59,7 +59,7 @@ async function fetchTokenData() {
       price: token.current_price,
       marketCap: token.market_cap,
       volume24h: token.total_volume,
-      tvl: token.|| 0,
+      tvl: token.ath,
       tvlChange1d: llamaProtocol?.tvlChange1d || 0,
       tvlChange1m: llamaProtocol?.tvlChange1m || 0,
       mcapTvl: llamaProtocol?.mcapTvl || 0,

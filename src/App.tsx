@@ -8,6 +8,8 @@ import { Documentation } from './pages/Documentation';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Footer } from './components/Footer';
 import { logPageView,initGA } from './services/analyticsService';
+import { useChains } from './services/chains';
+import { MarketOverview } from './components/MarketOverview';
 
 // Google Analytics tracking component
 // function GATracker() {
@@ -23,6 +25,7 @@ import { logPageView,initGA } from './services/analyticsService';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const { theme, toggleTheme } = useTheme();
+  const { chains} = useChains();
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
@@ -128,9 +131,14 @@ function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
+
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+   
+        <MarketOverview />
+
         {children}
       </main>
+     
 
       <Footer />
     </div>
