@@ -10,6 +10,7 @@ import { Footer } from './components/Footer';
 import { logPageView,initGA } from './services/analyticsService';
 import { useChains } from './services/chains';
 import { MarketOverview } from './components/MarketOverview';
+import { TopChains } from './components/TopChains';
 
 // Google Analytics tracking component
 // function GATracker() {
@@ -135,6 +136,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
    
         <MarketOverview />
+        <TopChains />
 
         {children}
       </main>

@@ -1,12 +1,30 @@
 import { useChains } from "../services/chains"
 import { useEffect, useState } from "react";
 import { formatNumber } from "../utils/formatNumber";
+import { TokenCardSkeleton } from "./LoadingSkeleton";
 
 export function MarketOverview() {
     const { chains, isLoading, error } = useChains();
 
-    const TotalTvl = chains?.reduce((acc, chain) => acc + chain.tvl, 0);
+    const TotalTvl = chains?.reduce((acc, chain) => acc + chain.tvl, 0) || 0;
 
+
+    if (isLoading) {
+        return <TokenCardSkeleton/>;
+    }
+
+    if (error) {
+        return (
+            <div className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Market Overview
+                </h2>
+                <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                    <p className="text-red-600 dark:text-red-400">Error loading market data: {error.message}</p>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="mb-8">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
