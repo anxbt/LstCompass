@@ -5,6 +5,7 @@ import { TokenCardSkeleton } from '../components/LoadingSkeleton';
 import { SearchBar } from '../components/SearchBar';
 import { FilterBar } from '../components/FilterBar';
 import { useTokenFilters } from '../hooks/useTokenFilters';
+import { MarketOverview } from '../components/MarketOverview';
 
 export function Markets() {
   const { tokens, loading, error } = useTokenData();
@@ -19,6 +20,7 @@ export function Markets() {
   if (loading) {
     return (
       <div>
+        <MarketOverview />
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Liquid Staking Markets
@@ -52,6 +54,7 @@ export function Markets() {
 
   return (
     <div>
+      <MarketOverview />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Liquid Staking Markets

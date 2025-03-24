@@ -41,7 +41,7 @@ export function MarketOverview() {
                 </div>
                 {/* 2nd card */}
 
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md border-gray-400 border ">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 dark:text-white hadow-md border-gray-400 border ">
                     <div className="mb-2">
                         <span>  🌐 Top chains by TVL</span>
                     </div>

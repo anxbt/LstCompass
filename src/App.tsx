@@ -1,5 +1,5 @@
 import React ,{ useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link ,useLocation} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link ,useLocation,NavLink} from 'react-router-dom';
 import { Coins, LayoutGrid, ArrowRightLeft, Sun, Moon, Book } from 'lucide-react';
 import { Markets } from './pages/Markets';
 import { Protocols } from './pages/Protocols';
@@ -40,34 +40,46 @@ function Layout({ children }: { children: React.ReactNode }) {
               </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link
+              <NavLink
                 to="/"
-                className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                // className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600
+                //  dark:hover:text-blue-400 transition-colors"
+                className={({ isActive }) => `
+                flex items-center transition-colors
+                ${isActive 
+                  ? 'text-blue-600 dark:text-blue-400 font-medium' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}
+              `}
               >
                 <Coins className="h-5 w-5 mr-2" />
                 Markets
-              </Link>
-              <Link
+              </NavLink>
+              <NavLink
                 to="/protocols"
-                className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className={({ isActive }) => `
+                flex items-center transition-colors
+                ${isActive 
+                  ? 'text-blue-600 dark:text-blue-400 font-medium' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}
+              `}
               >
                 <LayoutGrid className="h-5 w-5 mr-2" />
                 Protocols
-              </Link>
-              <Link
+              </NavLink>
+              <NavLink
                 to="/stake-swap"
                 className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 <ArrowRightLeft className="h-5 w-5 mr-2" />
                 Stake & Swap
-              </Link>
-              <Link
+              </NavLink>
+              <NavLink
                 to="/docs"
-                className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              
               >
                 <Book className="h-5 w-5 mr-2" />
                 Docs
-              </Link>
+              </NavLink>
               <button
                 onClick={toggleTheme}
                 className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -135,12 +147,12 @@ function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
    
-        <MarketOverview />
-        <TopChains />
+        {/* <MarketOverview /> */}
+    
 
         {children}
       </main>
-     
+
 
       <Footer />
     </div>
