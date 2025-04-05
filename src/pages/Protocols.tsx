@@ -74,7 +74,7 @@
 //           .filter((p: any) => p.category === 'Liquid Staking')
 //           .map((p: any) => {
 //             const feesInfo = feesMap.get(p.name.toLowerCase()) || {};
-            
+
 //             return {
 //               name: p.name,
 //               symbol: p.symbol || '',
@@ -128,7 +128,7 @@
 //     if (type === 'percentage') {
 //       return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
 //     }
-    
+
 //     if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
 //     if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
 //     if (value >= 1e3) return `$${(value / 1e3).toFixed(2)}K`;
@@ -331,7 +331,7 @@
 //         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
 //           {getSortedProtocols().map((protocol) => {
 //             const tvlChange24h = calculateTvlChange(protocol.tvl, protocol.tvlPrevDay);
-            
+
 //             return (
 //               <tr key={protocol.name} className="hover:bg-gray-50 dark:hover:bg-gray-700">
 //                 <td className="px-6 py-4">
@@ -380,7 +380,7 @@
 // }
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { ArrowUpRight, ArrowDown, ArrowUp, Download } from 'lucide-react';
+import { ArrowUpRight, ArrowDown, ArrowUp, Download, ArrowBigDownDash, ArrowBigDown } from 'lucide-react';
 import { TableRowSkeleton } from '../components/LoadingSkeleton';
 import {
   useReactTable,
@@ -390,7 +390,7 @@ import {
   flexRender,
   SortingState
 } from "@tanstack/react-table";
-import { set } from '@project-serum/anchor/dist/cjs/utils/features';
+
 
 interface Protocol {
   name: string;
@@ -428,7 +428,9 @@ interface Protocol {
   category: string;
   slug: string;
 }
-
+interface ExpandedState {
+  [key: string]: boolean;
+}
 
 export function Protocols() {
   const [protocols, setProtocols] = useState<Protocol[]>([]);
@@ -437,7 +439,8 @@ export function Protocols() {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'tvl', desc: true }
   ]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [expandedRows, setExpandedRows] = useState<ExpandedState>({});
 
   // Fetch data
   useEffect(() => {
@@ -466,7 +469,7 @@ export function Protocols() {
           .filter((p: any) => p.category === 'Liquid Staking')
           .map((p: any) => {
             const feesInfo = feesMap.get(p.name.toLowerCase()) || {};
-            
+
             return {
               name: p.name,
               symbol: p.symbol || '',
@@ -517,17 +520,19 @@ export function Protocols() {
   }, []);
 
 
-const handleViewDetails = () => {
+  const handleViewDetails = (protocolName: string) => {
 
-  console.log("hy");
-  setIsModalOpen(true);
-};
+    setExpandedRows(prev => ({
+      ...prev,
+      [protocolName]: !prev[protocolName]
+    }));
+  };
 
   const formatNumber = (value: number, type: 'currency' | 'percentage' = 'currency') => {
     if (type === 'percentage') {
       return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
     }
-    
+
     if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
     if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
     if (value >= 1e3) return `$${(value / 1e3).toFixed(2)}K`;
@@ -582,7 +587,7 @@ const handleViewDetails = () => {
 
   // Define columns using columnHelper
   const columnHelper = createColumnHelper<Protocol>();
-  
+
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
       header: 'Protocol',
@@ -621,9 +626,8 @@ const handleViewDetails = () => {
       cell: info => {
         const value = info.getValue();
         return (
-          <div className={`text-right font-medium ${
-            value >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-          }`}>
+          <div className={`text-right font-medium ${value >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+            }`}>
             {formatNumber(value, 'percentage')}
           </div>
         );
@@ -669,16 +673,31 @@ const handleViewDetails = () => {
       ),
       cell: info => (
         <div className="text-right">
-          <button onClick={() => handleViewDetails()}
-           className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            <ArrowUpRight size={16} className="mr-1" />
+          <button onClick={() => handleViewDetails(info.getValue())}
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 
+           rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
+            hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-blue-500">
+            {expandedRows[info.getValue()] ? (
+              <>
+              <ArrowUpRight size={16} className="mr-1" />
+               Hide details
+              </>
+         
+        ) : (
+          <>
+            <ArrowBigDown size={16} />
+
+           
             View Details
+          </>
+        )}
           </button>
         </div>
       ),
       enableSorting: false
     }),
-  ], []);
+  ], [expandedRows]);
 
   // Create table instance
   const table = useReactTable({
@@ -750,26 +769,6 @@ const handleViewDetails = () => {
     );
   }
 
-
-
-  // {isModalOpen && (
-  //   <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-  //     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full">
-  //       <div className="flex justify-between items-center mb-4">
-  //         <h2 className="text-xl font-bold">Protocol Details</h2>
-  //         <button 
-  //           onClick={() => setIsModalOpen(false)}
-  //           className="text-gray-500 hover:text-gray-700"
-  //         >
-  //           &times;
-  //         </button>
-  //       </div>
-  //       <p>Modal content goes here</p>
-  //     </div>
-  //   </div>
-  // )}
-
-  // Render with data
   return (
     <div className="overflow-x-auto">
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -796,28 +795,27 @@ const handleViewDetails = () => {
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <th 
+                  <th
                     key={header.id}
                     className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white"
-                    style={{ 
+                    style={{
                       cursor: header.column.getCanSort() ? 'pointer' : 'default',
                       textAlign: header.id.includes('name') || header.id.includes('actions') ? 'left' : 'right'
                     }}
                     onClick={header.column.getToggleSortingHandler()}
                   >
-                    <div className={`flex items-center ${
-                      header.id.includes('name') ? 'justify-start' : 'justify-end'
-                    } gap-2`}>
+                    <div className={`flex items-center ${header.id.includes('name') ? 'justify-start' : 'justify-end'
+                      } gap-2`}>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                      
+
                       {header.column.getCanSort() && (
                         <div className="flex flex-col">
                           {header.column.getIsSorted() ? (
-                            header.column.getIsSorted() === 'desc' ? 
-                              <ArrowDown size={16} /> : 
+                            header.column.getIsSorted() === 'desc' ?
+                              <ArrowDown size={16} /> :
                               <ArrowUp size={16} />
                           ) : null}
                         </div>
@@ -828,7 +826,7 @@ const handleViewDetails = () => {
               </tr>
             ))}
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          {/* <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map(row => (
                 <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -855,6 +853,66 @@ const handleViewDetails = () => {
                 </td>
               </tr>
             )}
+          </tbody> */}
+
+          <tbody className='divide-y '>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map(row => (
+                <React.Fragment key={row.id}>
+                  <tr className='hover:bg-gray-50 dark:hover:bg-gray-700'>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} className='px-6 py-4'>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                  {expandedRows[row.original.name] && (
+                    <tr>
+                      <td colSpan={columns.length}>
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            {row.original.name} Details
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="font-medium text-gray-700 dark:text-gray-300">Protocol Stats</h4>
+                              <p className="text-gray-600 dark:text-gray-400">
+                                Total Value Locked: {formatNumber(row.original.tvl)}
+                                <br />
+                                Market Cap: {formatNumber(row.original.mcap)}
+                                <br />
+                                Cumulative Fees: {formatNumber(row.original.cumulativeFees)}
+                              </p>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-gray-700 dark:text-gray-300">Revenue Metrics</h4>
+                              <p className="text-gray-600 dark:text-gray-400">
+                                30-day Revenue: {formatNumber(row.original.revenue['30d'])}
+                                <br />
+                                Treasury Revenue (24h): {formatNumber(row.original.treasuryRevenue24h)}
+                                <br />
+                                Holders Revenue (30d): {formatNumber(row.original.holdersRevenue['30d'])}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                  No protocols found
+                </td>
+              </tr>
+            )}
+
           </tbody>
         </table>
       </div>
