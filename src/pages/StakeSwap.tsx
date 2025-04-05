@@ -82,7 +82,7 @@ export function StakeSwap() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Stake & Swap
         </h1>
-        <p className="text-gray-600">
+        <p className="text-black dark:text-white">
           Stake your ETH or swap between liquid staking tokens
         </p>
       </div>
