@@ -73,12 +73,9 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <ArrowRightLeft className="h-5 w-5 mr-2" />
                 Stake & Swap
               </NavLink>
-              <NavLink
-                to="/docs"
-              
-              >
-                <Book className="h-5 w-5 mr-2" />
-                Docs
+              <NavLink to="/docs">
+                <Book className="h-5 w-5 mr-2 text-white" />
+                <span className='text-white'>Docs</span>
               </NavLink>
               <button
                 onClick={toggleTheme}
@@ -136,7 +133,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             </Link>
             <Link
               to="/docs"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
             >
               Docs
             </Link>
